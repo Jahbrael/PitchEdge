@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Model Performance - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<main class="pe-main">
+    <section class="pe-card elevated">
+        <div class="pe-section-header">
+            <div>
+                <h2>Model Performance</h2>
+                <p>Accuracy, confidence bands, settled predictions, and value-pick performance from existing results.</p>
+            </div>
+        </div>
+        <div class="pe-grid-4" id="performanceStats">
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+        </div>
+    </section>
+    <section class="pe-card">
+        <div class="pe-section-header">
+            <div>
+                <h2>Accuracy Rows</h2>
+                <p>Recent model accuracy snapshots by league and market.</p>
+            </div>
+        </div>
+        <div id="accuracyList" class="pe-grid-3"></div>
+    </section>
+</main>
+<script src="/model-performance.js"></script>
+</body>
+</html>

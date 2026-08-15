@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prediction Builder - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="stylesheet" href="/predictions.css">
+</head>
+<body>
+
+
+<main class="shell shell-fluid">
+    <div id="topSummaryBar" class="top-summary-bar glass-panel">
+        <div class="summary-item"><span>Leagues</span><strong id="sumLeagues">0</strong></div>
+        <div class="summary-item"><span>Markets</span><strong id="sumMarkets">0</strong></div>
+        <div class="summary-item"><span>Dates</span><strong id="sumDates">-</strong></div>
+        <div class="summary-item"><span>Strategy</span><strong id="sumStrategy">-</strong></div>
+        <div class="summary-item"><span>Status</span><strong id="sumRunStatus">Ready</strong></div>
+    </div>
+
+    <section class="pe-card feature" id="builderOverview">
+        <div class="pe-section-header">
+            <div>
+                <h2>Build a Prediction Run</h2>
+                <p>Choose competitions, markets, filters, and strategy. Then generate a run and review the qualified picks on the results page.</p>
+            </div>
+            <button type="submit" form="predictionForm" class="pe-btn">Generate Predictions</button>
+        </div>
+        <div class="pe-metric-grid">
+            <div class="pe-metric"><span>Step 1</span><strong>Competitions</strong><small>Select the leagues to include.</small></div>
+            <div class="pe-metric"><span>Step 2</span><strong>Markets</strong><small>Choose markets the model should evaluate.</small></div>
+            <div class="pe-metric"><span>Step 3</span><strong>Filters</strong><small>Set probability, confidence, and value rules.</small></div>
+            <div class="pe-metric"><span>Step 4</span><strong>Generate</strong><small>Open the run in Prediction Results.</small></div>
+        </div>
+    </section>
+
+    <div class="section-container glass-panel">
+        <button class="section-toggle" aria-expanded="true" aria-controls="predictionBuilder">
+            <h2>Prediction Builder</h2>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="predictionBuilder" class="section-content">
+            <form id="predictionForm" class="form-panel no-border">
+                <!-- Group 1: Leagues -->
+                <section class="form-section" aria-labelledby="league-title">
+                    <div class="section-title-row">
+                        <h3 id="league-title">Leagues</h3>
+                        <div class="selection-controls" aria-label="League selection controls">
+                            <button type="button" class="secondary compact" data-select-all="leagueCodes">All</button>
+                            <button type="button" class="secondary compact" data-clear-all="leagueCodes">Clear</button>
+                        </div>
+                    </div>
+                    <div class="league-picker-tools">
+                        <label class="form-group league-search-group">
+                            <span>Search leagues</span>
+                            <input id="leagueSearch" type="search" placeholder="Search by league, country, or region">
+                        </label>
+                        <div class="league-picker-status">
+                            <strong id="leagueSelectionCount">0 selected</strong>
+                            <span id="leagueAvailabilityHint">Loading local league catalog...</span>
+                        </div>
+                    </div>
+                    <div id="leagueChoiceGrid" class="league-choice-list">
+                        <div class="empty-state">Loading leagues...</div>
+                    </div>
+                </section>
+
+                <!-- Group 2: Markets -->
+                <section class="form-section" aria-labelledby="markets-title">
+                    <div class="section-title-row">
+                        <h3 id="markets-title">Markets</h3>
+                        <div class="selection-controls" aria-label="Market selection controls">
+                            <button type="button" class="secondary compact" data-select-all="marketCodes">All</button>
+                            <button type="button" class="secondary compact" data-clear-all="marketCodes">Clear</button>
+                        </div>
+                    </div>
+                    <div class="market-picker-tools">
+                        <label for="marketSearch">Find a market</label>
+                        <input id="marketSearch" type="search" placeholder="Search goals, corners, cards…" autocomplete="off">
+                        <span id="marketVisibleCount" class="selection-count" aria-live="polite">74 markets</span>
+                    </div>
+                    <div id="marketChoiceList" class="market-choice-list">
+                        <div class="market-option-group">
+                            <div class="market-option-group-title">Match Result & Double Chance</div>
+                            <div class="choice-grid market-grid">
+                                <label><input type="checkbox" name="marketCodes" value="HOME_WIN" checked> Home Win</label>
+                                <label><input type="checkbox" name="marketCodes" value="DRAW" checked> Draw</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_WIN" checked> Away Win</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_OR_DRAW"> Home or Draw</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_OR_DRAW"> Away or Draw</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_OR_AWAY"> Home or Away</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_DRAW_NO_BET"> Home Draw No Bet</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_DRAW_NO_BET"> Away Draw No Bet</label>
+                                <label><input type="checkbox" name="marketCodes" value="BTTS_YES" checked> BTTS</label>
+                                <label><input type="checkbox" name="marketCodes" value="BTTS_NO" checked> BTTS No</label>
+                            </div>
+                        </div>
+
+                        <div class="market-option-group">
+                            <div class="market-option-group-title">Match Total Goals</div>
+                            <div class="choice-grid market-grid">
+                                <label><input type="checkbox" name="marketCodes" value="OVER_0_5_GOALS"> Over 0.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="OVER_1_5_GOALS" checked> Over 1.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="UNDER_1_5_GOALS"> Under 1.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="OVER_2_5_GOALS" checked> Over 2.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="UNDER_2_5_GOALS" checked> Under 2.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="OVER_3_5_GOALS"> Over 3.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="UNDER_3_5_GOALS" checked> Under 3.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="OVER_4_5_GOALS"> Over 4.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="UNDER_4_5_GOALS"> Under 4.5 Goals</label>
+                            </div>
+                        </div>
+
+                        <div class="market-option-group">
+                            <div class="market-option-group-title">Team Goals & Clean Sheets</div>
+                            <div class="choice-grid market-grid">
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_OVER_0_5_GOALS"> Home Over 0.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CLEAN_SHEET"> Home Clean Sheet</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_OVER_1_5_GOALS"> Home Over 1.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_UNDER_1_5_GOALS"> Home Under 1.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_OVER_2_5_GOALS"> Home Over 2.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_UNDER_2_5_GOALS"> Home Under 2.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_OVER_0_5_GOALS"> Away Over 0.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CLEAN_SHEET"> Away Clean Sheet</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_OVER_1_5_GOALS"> Away Over 1.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_UNDER_1_5_GOALS"> Away Under 1.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_OVER_2_5_GOALS"> Away Over 2.5 Goals</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_UNDER_2_5_GOALS"> Away Under 2.5 Goals</label>
+                            </div>
+                        </div>
+
+                        <div class="market-option-group">
+                            <div class="market-option-group-title">Match Corners</div>
+                            <div class="choice-grid market-grid">
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_5_5"> Corners Over 5.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_5_5"> Corners Under 5.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_6_5"> Corners Over 6.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_6_5"> Corners Under 6.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_7_5"> Corners Over 7.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_7_5"> Corners Under 7.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_8_5" checked> Corners Over 8.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_8_5"> Corners Under 8.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_9_5"> Corners Over 9.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_9_5"> Corners Under 9.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_10_5"> Corners Over 10.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_10_5"> Corners Under 10.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_11_5"> Corners Over 11.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_11_5"> Corners Under 11.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_12_5"> Corners Over 12.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_12_5"> Corners Under 12.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_OVER_13_5"> Corners Over 13.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="CORNERS_UNDER_13_5"> Corners Under 13.5</label>
+                            </div>
+                        </div>
+
+                        <div class="market-option-group">
+                            <div class="market-option-group-title">Team Corners</div>
+                            <div class="choice-grid market-grid">
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_OVER_2_5"> Home Corners Over 2.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_UNDER_2_5"> Home Corners Under 2.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_OVER_3_5"> Home Corners Over 3.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_UNDER_3_5"> Home Corners Under 3.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_OVER_4_5"> Home Corners Over 4.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_UNDER_4_5"> Home Corners Under 4.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_OVER_5_5"> Home Corners Over 5.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="HOME_TEAM_CORNERS_UNDER_5_5"> Home Corners Under 5.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_OVER_2_5"> Away Corners Over 2.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_UNDER_2_5"> Away Corners Under 2.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_OVER_3_5"> Away Corners Over 3.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_UNDER_3_5"> Away Corners Under 3.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_OVER_4_5"> Away Corners Over 4.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_UNDER_4_5"> Away Corners Under 4.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_OVER_5_5"> Away Corners Over 5.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="AWAY_TEAM_CORNERS_UNDER_5_5"> Away Corners Under 5.5</label>
+                            </div>
+                        </div>
+
+                        <div class="market-option-group">
+                            <div class="market-option-group-title">Cards</div>
+                            <div class="choice-grid market-grid">
+                                <label><input type="checkbox" name="marketCodes" value="YELLOW_CARDS_OVER_2_5"> Yellow Cards Over 2.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="YELLOW_CARDS_UNDER_2_5"> Yellow Cards Under 2.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="YELLOW_CARDS_OVER_3_5" checked> Yellow Cards Over 3.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="YELLOW_CARDS_OVER_4_5"> Yellow Cards Over 4.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="YELLOW_CARDS_UNDER_4_5"> Yellow Cards Under 4.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="YELLOW_CARDS_OVER_5_5"> Yellow Cards Over 5.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="YELLOW_CARDS_UNDER_5_5"> Yellow Cards Under 5.5</label>
+                                <label><input type="checkbox" name="marketCodes" value="RED_CARD_YES" checked> Red Card Yes</label>
+                                <label><input type="checkbox" name="marketCodes" value="RED_CARD_NO"> Red Card No</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="form-section market-ranges-section" aria-labelledby="market-ranges-title">
+                    <div class="section-title-row">
+                        <h3 id="market-ranges-title">Individual Market Probability Ranges</h3>
+                        <div class="selection-controls">
+                            <button type="button" class="secondary compact" id="addMarketRangeBtn">+ Add Range</button>
+                            <button type="button" class="secondary compact" id="resetMarketRangeBtn">Reset</button>
+                        </div>
+                    </div>
+                    <p class="helper-text">Override global probability limits for specific markets.</p>
+                    <div id="marketRangesContainer" class="market-ranges-container"></div>
+                </section>
+
+                <section class="form-section controls-section" aria-labelledby="settings-title">
+                    <div class="section-title-row">
+                        <h3 id="settings-title">Batch Settings</h3>
+                        <button type="button" class="secondary compact" id="toggleHelpBtn" aria-expanded="false">Batch Settings Guide</button>
+                    </div>
+                    
+                    <div id="settingsHelp" class="help-drawer hidden">
+                        <h4>Batch Settings Guide</h4>
+                        <div class="help-grid">
+                            <div><strong>From / To:</strong> The date range for upcoming fixtures. Defaults to a 1-day interval (up to 14 days max).</div>
+                            <div><strong>Strategy:</strong> Determines how candidates are selected and ranked.
+                                <ul>
+                                    <li><em>Lower Risk:</em> Prioritizes safer picks (high prob >75%).</li>
+                                    <li><em>Balanced:</em> Balances probability (60-78%) and confidence.</li>
+                                    <li><em>Value:</em> Focuses on Expected Value and Edge vs Bookmaker odds.</li>
+                                    <li><em>Longshot:</em> Finds high-edge picks that are unlikely but highly profitable.</li>
+                                    <li><em>High Confidence:</em> Strictest data quality and high sample size.</li>
+                                </ul>
+                            </div>
+                            <div><strong>Batches:</strong> Number of separate accumulators to generate.</div>
+                            <div><strong>Min/Max Picks:</strong> How many selections to include per batch.</div>
+                            <div><strong>Min/Max Probability:</strong> The global allowed percentage range (0-100) for a pick to qualify. Example: 70%. Custom Market Ranges will override this.</div>
+                            <div><strong>Min Confidence:</strong> The model's confidence rating of the fixture.</div>
+                            <div><strong>Min Data Quality:</strong> The reliability of the historical data (0-100%).</div>
+                            <div><strong>Min EV:</strong> Minimum expected value (e.g., 0.05 means 5% expected profit margin).</div>
+                            <div><strong>Min Edge:</strong> Minimum probability edge vs bookmakers (e.g., 0.05).</div>
+                            <div><strong>Ranking:</strong> How the final qualified picks are sorted to form the best batch.</div>
+                        </div>
+                    </div>
+
+                    <div class="input-grid">
+                        <label class="form-group">
+                            <span>From</span>
+                            <input id="fixtureDateFrom" name="fixtureDateFrom" type="date" required>
+                        </label>
+                        <label class="form-group">
+                            <span>To</span>
+                            <input id="fixtureDateTo" name="fixtureDateTo" type="date" required>
+                        </label>
+                        <label class="form-group">
+                            <span>Strategy</span>
+                            <select name="strategy">
+                                <option value="LOWER_RISK">Lower Risk</option>
+                                <option value="BALANCED" selected>Balanced</option>
+                                <option value="VALUE">Value</option>
+                                <option value="LONGSHOT">Longshot</option>
+                                <option value="HIGH_CONFIDENCE">High Confidence</option>
+                                <option value="MIXED_PORTFOLIO">Mixed Portfolio</option>
+                                <option value="CUSTOM">Custom</option>
+                            </select>
+                        </label>
+                        <label class="form-group">
+                            <span>Batches</span>
+                            <input name="numberOfBatches" type="number" min="1" value="3" required>
+                        </label>
+                        <label class="form-group">
+                            <span>Minimum Picks</span>
+                            <input name="minimumSelections" type="number" min="1" value="5" required>
+                        </label>
+                        <label class="form-group">
+                            <span>Maximum Picks</span>
+                            <input name="maximumSelections" type="number" min="1" value="10" required>
+                        </label>
+                        <label class="form-group">
+                            <span>Min Probability (%)</span>
+                            <input name="minimumModelProbability" type="number" min="0" max="100" step="1" placeholder="Strategy default">
+                        </label>
+                        <label class="form-group">
+                            <span>Max Probability (%)</span>
+                            <input name="maximumModelProbability" type="number" min="0" max="100" step="1" placeholder="Strategy default">
+                        </label>
+                        <label class="form-group">
+                            <span>Minimum Confidence</span>
+                            <select name="minimumConfidence">
+                                <option value="">Strategy default</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
+                                <option value="VERY_HIGH">Very High</option>
+                            </select>
+                        </label>
+                        <label class="form-group">
+                            <span>Min Data Quality (%)</span>
+                            <input name="minimumDataQuality" type="number" min="0" max="100" step="1" placeholder="Strategy default">
+                        </label>
+                        <label class="form-group">
+                            <span>Minimum EV</span>
+                            <input name="minimumExpectedValue" type="number" min="0" step="0.01" placeholder="Value strategies">
+                        </label>
+                        <label class="form-group">
+                            <span>Minimum Edge</span>
+                            <input name="minimumProbabilityEdge" type="number" min="0" max="1" step="0.01" placeholder="Value strategies">
+                        </label>
+                        <label class="form-group">
+                            <span>Ranking</span>
+                            <select name="rankingMode">
+                                <option value="">Strategy default</option>
+                                <option value="MODEL_PROBABILITY">Model Probability</option>
+                                <option value="COMPOSITE_SCORE">Composite Score</option>
+                                <option value="EXPECTED_VALUE">Expected Value</option>
+                                <option value="PROBABILITY_EDGE">Probability Edge</option>
+                                <option value="DATA_QUALITY">Data Quality</option>
+                                <option value="CONFIDENCE">Confidence</option>
+                            </select>
+                        </label>
+                    </div>
+                </section>
+
+                <div class="actions">
+                    <button id="submitButton" type="submit">Generate Predictions</button>
+                    <button id="exportButton" type="button" class="secondary">Download Excel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Fixture Browser -->
+    <div class="section-container glass-panel">
+        <button class="section-toggle" aria-expanded="true" aria-controls="fixtureBrowser">
+            <h2>Fixture Browser</h2>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="fixtureBrowser" class="section-content">
+            <div class="fixture-browser-header" style="flex-direction: column; align-items: stretch; gap: 16px;">
+                <div class="date-carousel" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; align-items: center;">
+                    <button type="button" class="tab-btn secondary compact" id="fixtureYesterdayBtn" style="border-radius: 20px; padding: 8px 16px; font-weight: 600; white-space: nowrap;">Yesterday</button>
+                    <button type="button" class="tab-btn active compact" id="fixtureTodayBtn" style="border-radius: 20px; padding: 8px 16px; font-weight: 600; background: var(--brand); color: #fff; white-space: nowrap;">Today</button>
+                    <button type="button" class="tab-btn secondary compact" id="fixtureTomorrowBtn" style="border-radius: 20px; padding: 8px 16px; font-weight: 600; white-space: nowrap;">Tomorrow</button>
+                    <div style="display: flex; align-items: center; gap: 4px; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 2px 12px;">
+                        <span style="font-size: 12px; font-weight: 800; color: var(--muted);">Date</span>
+                        <input type="date" id="fixtureBrowserDate" style="border: none; background: transparent; color: var(--text); font-family: inherit; font-size: 14px; padding: 4px; cursor: pointer;">
+                    </div>
+                    <button type="button" class="secondary compact" id="fixturePrevBtn" style="display: none;">&lt;</button>
+                    <button type="button" class="secondary compact" id="fixtureNextBtn" style="display: none;">&gt;</button>
+                </div>
+                <div class="fixture-filters">
+                    <input type="text" id="fixtureBrowserSearch" placeholder="Search team...">
+                    <select id="fixtureBrowserLeague">
+                        <option value="">All Leagues</option>
+                    </select>
+                    <select id="fixtureBrowserStatus">
+                        <option value="">All Fixtures</option>
+                        <option value="PRED_READY">Predictions ready</option>
+                        <option value="NO_PRED">No prediction yet</option>
+                        <option value="LIVE">Live</option>
+                        <option value="FINISHED">Finished</option>
+                        <option value="SCHEDULED">Scheduled</option>
+                        <option value="ODDS_AVAIL">Odds available</option>
+                    </select>
+                    <select id="fixtureBrowserGroup">
+                        <option value="LEAGUE">Group by League</option>
+                        <option value="TIME">Group by Time</option>
+                        <option value="NONE">No Grouping</option>
+                    </select>
+                </div>
+            </div>
+            <div class="fixture-refresh-bar">
+                <div class="refresh-left">
+                    <span id="fixtureFreshness">Live score sync checks today’s fixtures every 3 minutes.</span>
+                </div>
+            </div>
+            <div id="fixtureBrowserLoading" class="hidden empty-state">Loading fixtures...</div>
+            <div id="fixtureBrowserEmpty" class="hidden empty-state">No fixtures found for this date.</div>
+            <div id="fixtureBrowserList" class="fixture-groups-container"></div>
+        </div>
+    </div>
+</main>
+
+<div id="fixtureModal" class="modal-overlay hidden" aria-modal="true" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Fixture Details</h2>
+            <button class="modal-close" id="modalCloseBtn" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="modalLoading" class="empty-state">
+                <p>Loading predictions...</p>
+            </div>
+            <div id="modalError" class="empty-state hidden">
+                <p>Failed to load predictions.</p>
+            </div>
+            <div id="modalTableWrap" class="selection-table-wrap hidden">
+                <table id="modalTable">
+                    <thead>
+                        <tr>
+                            <th>Market</th>
+                            <th>Pick</th>
+                            <th>Probability</th>
+                            <th>Odds</th>
+                            <th>EV</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modalTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script src="/predictions.js"></script>
+</body>
+</html>

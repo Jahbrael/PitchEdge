@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<main class="pe-main" style="max-width:480px">
+    <section class="pe-card elevated" style="margin-top:48px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+            <span class="pe-logo-mark" id="authLogo"></span>
+            <div>
+                <h1>PitchEdge</h1>
+                <p style="color:var(--text-muted);margin:5px 0 0">Football predictions with evidence, probability, and market edge.</p>
+            </div>
+        </div>
+        <h2>Sign in</h2>
+        <div id="errorMessage" class="pe-card hidden" style="border-color:rgba(255,77,109,.28);color:var(--bad)"></div>
+        <form id="loginForm" class="pe-page-grid">
+            <label>
+                <span>Username</span>
+                <input type="text" id="username" name="username" required autocomplete="username">
+            </label>
+            <label>
+                <span>Password</span>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </label>
+            <button type="submit" class="pe-btn">Sign In</button>
+        </form>
+        <p style="text-align:center;color:var(--text-muted);margin:18px 0 0">
+            No account yet? <a href="/register.html" style="color:var(--ok);font-weight:800;text-decoration:none">Create one</a>
+        </p>
+    </section>
+</main>
+<script src="/login.js"></script>
+</body>
+</html>

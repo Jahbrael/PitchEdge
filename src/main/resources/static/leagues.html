@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leagues - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<main class="pe-main">
+    <section class="pe-card elevated">
+        <div class="pe-section-header">
+            <div>
+                <h2>Leagues</h2>
+                <p>Season coverage, match tracking, prediction readiness, and data availability by competition.</p>
+            </div>
+        </div>
+        <div class="pe-filter-bar">
+            <input type="search" id="leagueSearch" placeholder="Search league or country">
+            <select id="historyFilter">
+                <option value="">All history states</option>
+                <option value="COMPLETE">Complete</option>
+                <option value="PARTIAL">Partial</option>
+                <option value="PENDING">Pending</option>
+            </select>
+        </div>
+    </section>
+    <section id="leagueList" class="pe-grid-3">
+        <div class="pe-skeleton"></div>
+        <div class="pe-skeleton"></div>
+        <div class="pe-skeleton"></div>
+    </section>
+</main>
+<script src="/leagues.js"></script>
+</body>
+</html>

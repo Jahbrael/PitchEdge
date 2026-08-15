@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PitchEdge Admin Dashboard</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="stylesheet" href="/admin/dashboard.css">
+</head>
+<body>
+<header class="topbar layout">
+    <div>
+        <p class="eyebrow">PitchEdge Admin</p>
+        <h1>Operational Dashboard</h1>
+    </div>
+    <div style="display: flex; gap: 16px; align-items: center;">
+        <div id="systemStatus" class="status-pill">UNKNOWN</div>
+        <button class="theme-toggle-btn" aria-label="Toggle dark mode">
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18.75a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 .75-.75ZM6.166 18.894a.75.75 0 0 1-1.06-1.06l1.59-1.591a.75.75 0 1 1 1.061 1.06l-1.59 1.591ZM2.25 12a.75.75 0 0 1 .75-.75H5.25a.75.75 0 0 1 0 1.5H3a.75.75 0 0 1-.75-.75ZM6.166 5.106a.75.75 0 0 1 1.06 1.06L5.636 7.757a.75.75 0 0 1-1.06-1.061l1.59-1.59Z"/></svg>
+            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z"/></svg>
+        </button>
+        <a class="admin-link" href="/predictions.html" style="color: var(--brand); font-weight: 700; text-decoration: none;">Predictions</a>
+    </div>
+</header>
+
+<main class="layout">
+    <section class="toolbar" aria-labelledby="auth-title">
+        <div>
+            <h2 id="auth-title">Admin Access</h2>
+            <p>Enter the admin key to manage the dashboard.</p>
+        </div>
+        <div class="controls">
+            <input id="adminKey" type="password" autocomplete="off" placeholder="X-BETAI-ADMIN-KEY">
+            <button id="saveKey" type="button">Save Key</button>
+            <button id="refreshDashboard" type="button">Refresh Data</button>
+            <button id="runAutomationBtn" type="button" class="primary-btn">Run automation now</button>
+        </div>
+    </section>
+
+    <!-- Alerts Section (Expanded by default when present) -->
+    <section id="alertsSection" class="section hidden" aria-labelledby="alerts-title">
+        <div class="section-header">
+            <h2 id="alerts-title">System Alerts</h2>
+            <div class="section-summary" id="alertsSummary"></div>
+        </div>
+        <div class="section-content" id="alertsContent">
+            <div id="alertsList" class="alerts-grid"></div>
+        </div>
+    </section>
+
+    <!-- Run Automation Modal -->
+    <div id="runAutomationModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 style="margin-top: 0;">Confirm Automation Run</h3>
+            <p>This will run the same automation normally triggered by the daily cron. It may take several minutes and may use API quota. Continue?</p>
+            <div style="display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end;">
+                <button id="cancelAutomationBtn" class="secondary-btn">Cancel</button>
+                <button id="confirmAutomationBtn" class="primary-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Totals Section -->
+    <section class="section" aria-labelledby="totals-title">
+        <h2 id="totals-title">System Totals</h2>
+        <div id="totalsGrid" class="metric-grid"></div>
+    </section>
+
+    <!-- Data Status Section -->
+    <section class="section" aria-labelledby="data-status-title">
+        <div class="admin-static-header">
+            <div>
+                <h2 id="data-status-title">Data Status</h2>
+                <p>Operational import, score, odds, prediction, and automation status.</p>
+            </div>
+            <div class="section-summary" id="dataStatusSummary">
+                <span class="tag">Loading...</span>
+            </div>
+        </div>
+        <div id="dataStatusGrid" class="metric-grid data-status-grid"></div>
+    </section>
+
+    <section class="section automation-progress-section" aria-labelledby="automation-progress-title">
+        <div class="admin-static-header automation-progress-header">
+            <div>
+                <h2 id="automation-progress-title">Automation Progress</h2>
+                <p>Live state from the scheduled/manual automation pipeline.</p>
+            </div>
+            <span id="automationProgressStatus" class="tag">Not Started</span>
+        </div>
+
+        <div class="automation-progress-track" role="progressbar" aria-label="Automation progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="automationProgressBar" class="automation-progress-bar" style="width: 0%"></div>
+        </div>
+        <div class="automation-progress-caption">
+            <strong id="automationProgressPercent">0%</strong>
+            <span id="automationProgressCount">0 of 8 steps completed</span>
+        </div>
+
+        <div class="automation-progress-details">
+            <div class="automation-progress-detail">
+                <span>Current step</span>
+                <strong id="automationCurrentStep">—</strong>
+            </div>
+            <div class="automation-progress-detail">
+                <span>Start time</span>
+                <strong id="automationStartTime">—</strong>
+            </div>
+            <div class="automation-progress-detail">
+                <span>Last update</span>
+                <strong id="automationLastUpdateTime">—</strong>
+            </div>
+            <div class="automation-progress-detail">
+                <span>Completion time</span>
+                <strong id="automationCompletionTime">—</strong>
+            </div>
+        </div>
+
+        <div id="automationProgressError" class="automation-progress-error hidden" role="alert"></div>
+    </section>
+
+    <!-- Recent Runs Section (Collapsed by default) -->
+    <section class="section collapsible collapsed" id="runsSection" aria-labelledby="runs-title">
+        <div class="section-header" tabindex="0" role="button" aria-expanded="false" data-target="runsContent">
+            <h2>Recent Runs</h2>
+            <div class="section-summary" id="runsSummary">
+                <span class="tag">Loading...</span>
+            </div>
+            <div class="chevron">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </div>
+        <div class="section-content" id="runsContent">
+            <div class="filters">
+                <select id="runStatusFilter">
+                    <option value="ALL">All Statuses</option>
+                    <option value="FAILED">Failed</option>
+                    <option value="PARTIAL_SUCCESS">Partial Success</option>
+                    <option value="SUCCESS">Success</option>
+                    <option value="RUNNING">Running</option>
+                </select>
+                <select id="runStageFilter">
+                    <option value="ALL">All Stages</option>
+                </select>
+                <input type="text" id="runLeagueSearch" placeholder="Search league...">
+                <button id="runsFilterResetBtn" class="secondary-btn">Reset</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Stage</th>
+                        <th>League</th>
+                        <th>Started</th>
+                        <th>Duration</th>
+                        <th>Attempts</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="runRows"></tbody>
+                </table>
+            </div>
+            <div id="runsEmptyState" class="empty-state hidden">No runs found.</div>
+            <div class="pagination-controls hidden" id="runsPagination">
+                <button id="runsPrevBtn" class="pagination-btn" disabled>Previous</button>
+                <span id="runsPageInfo" class="pagination-info">Page 1 of 1</span>
+                <button id="runsNextBtn" class="pagination-btn" disabled>Next</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- League Status Section (Collapsed by default) -->
+    <section class="section collapsible collapsed" id="leaguesSection" aria-labelledby="league-title">
+        <div class="section-header" tabindex="0" role="button" aria-expanded="false" data-target="leaguesContent">
+            <h2>League Status</h2>
+            <div class="section-summary" id="leagueSummary">
+                <span class="tag">Loading...</span>
+            </div>
+            <div class="chevron">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </div>
+        <div class="section-content" id="leaguesContent">
+            <div class="filters">
+                <select id="leagueCoverageFilter">
+                    <option value="ALL">All Coverage</option>
+                    <option value="OK">OK / Complete</option>
+                    <option value="LOW_HISTORY">Low History</option>
+                    <option value="LOW_FIXTURE_COVERAGE">Low Fixtures</option>
+                    <option value="LOW_HISTORY_AND_FIXTURES">Low History & Fixtures</option>
+                </select>
+                <input type="text" id="leagueSearch" placeholder="Search leagues...">
+                <button id="leagueFilterResetBtn" class="secondary-btn">Reset</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>League</th>
+                        <th>Policy</th>
+                        <th>Seasons</th>
+                        <th>Matches</th>
+                        <th>Scheduled</th>
+                        <th>Finished</th>
+                        <th>Coverage</th>
+                        <th>Latest Refresh</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="leagueRows"></tbody>
+                </table>
+            </div>
+            <div id="leagueEmptyState" class="empty-state hidden">No leagues found.</div>
+        </div>
+    </section>
+
+    <!-- Source Health Section (Collapsed by default) -->
+    <section class="section collapsible collapsed" id="sourcesSection" aria-labelledby="sources-title">
+        <div class="section-header" tabindex="0" role="button" aria-expanded="false" data-target="sourcesContent">
+            <h2>Source Health</h2>
+            <div class="section-summary" id="sourceSummary">
+                <span class="tag">Loading...</span>
+            </div>
+            <div class="chevron">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </div>
+        <div class="section-content" id="sourcesContent">
+            <div class="filters">
+                <select id="sourceActiveFilter">
+                    <option value="ACTIVE_ONLY">Active Sources Only</option>
+                    <option value="ALL">All Sources (Incl. Historical)</option>
+                </select>
+                <select id="sourceProviderFilter">
+                    <option value="ALL">All Providers</option>
+                    <option value="TheSportsDB">TheSportsDB</option>
+                    <option value="SharpAPI">SharpAPI</option>
+                    <option value="The Odds API">The Odds API</option>
+                    <option value="API-Football">API-Football</option>
+                </select>
+                <select id="sourceHealthFilter">
+                    <option value="ALL">All Health Statuses</option>
+                    <option value="OK">OK</option>
+                    <option value="QUARANTINED">Quarantined</option>
+                    <option value="DEGRADED">Degraded</option>
+                    <option value="DISABLED">Disabled</option>
+                </select>
+                <input type="text" id="sourceSearch" placeholder="Search source or league...">
+                <button id="sourceFilterResetBtn" class="secondary-btn">Reset</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>League</th>
+                        <th>Type</th>
+                        <th>Health</th>
+                        <th>Reliability</th>
+                        <th>Failures</th>
+                        <th>Last Event</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="sourceRows"></tbody>
+                </table>
+            </div>
+            <div id="sourceEmptyState" class="empty-state hidden">No sources found.</div>
+        </div>
+    </section>
+</main>
+
+<!-- Drawer for Row Details -->
+<div id="detailDrawer" class="drawer" aria-hidden="true">
+    <div class="drawer-overlay" id="drawerOverlay" tabindex="-1"></div>
+    <div class="drawer-content" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+        <div class="drawer-header">
+            <h2 id="drawerTitle">Details</h2>
+            <button class="drawer-close" id="drawerCloseBtn" aria-label="Close details">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="drawer-body" id="drawerBody">
+            <!-- Details content injected here -->
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script src="/admin/dashboard.js"></script>
+</body>
+</html>

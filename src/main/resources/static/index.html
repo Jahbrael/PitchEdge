@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body class="pe-home-page">
+<main class="pe-main pe-home-main">
+    <section class="pe-card elevated feature pe-home-hero" id="homeHero">
+        <div class="pe-home-hero-copy">
+            <p class="pe-page-kicker">Matchday Analysis</p>
+            <h2>Football predictions with evidence, probability, and market edge.</h2>
+            <p>Review fixtures, compare model probabilities, check value picks, and open the match evidence behind each recommendation.</p>
+            <div class="pe-card-actions">
+                <a class="pe-btn" href="/predictions.html">Generate Predictions</a>
+                <a class="pe-btn secondary" href="/fixtures.html">Browse Fixtures</a>
+                <a class="pe-btn secondary" href="/value-picks.html">View Value Picks</a>
+            </div>
+        </div>
+        <div class="pe-home-hero-panel">
+            <span class="pe-badge accent" id="homeDate">Today’s football view</span>
+            <strong>Not just predictions.</strong>
+            <p>PitchEdge shows the evidence behind every pick before you open the full Match Center.</p>
+        </div>
+    </section>
+
+    <section class="pe-card pe-home-overview">
+        <div class="pe-section-header">
+            <div>
+                <h2>Today at a Glance</h2>
+                <p>Key football metrics across today’s fixtures, high confidence picks, and live matches.</p>
+            </div>
+            <a class="pe-btn secondary compact" href="/fixtures.html">Browse Fixtures</a>
+        </div>
+        <div class="pe-grid-4" id="dashboardStats">
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+        </div>
+    </section>
+
+    <section class="pe-home-feature-grid">
+        <div class="pe-home-main-column">
+            <div class="pe-card feature">
+                <div class="pe-section-header">
+                    <div>
+                        <h2>Today’s Best Picks</h2>
+                        <p>Very high confidence selections that are ready for evidence review.</p>
+                    </div>
+                    <a class="pe-btn secondary compact" href="/history.html">History</a>
+                </div>
+                <div class="pe-page-grid" id="bestPicksList"></div>
+            </div>
+
+            <div class="pe-card feature pe-machine-filter-panel">
+                <div class="pe-section-header">
+                    <div>
+                        <h2>PitchEdge Machine Filters</h2>
+                        <p>Jump straight to stored predictions filtered by market, confidence, and edge.</p>
+                    </div>
+                    <a class="pe-btn secondary compact" href="/machine.html">Open Machine</a>
+                </div>
+                <div class="pe-machine-filter-summary">
+                    <div>
+                        <span>Advanced filter shortcuts</span>
+                        <strong>Find qualified picks faster</strong>
+                    </div>
+                    <p>Use these presets to open Machine with a clear review angle: confidence, value, probability, or risk.</p>
+                </div>
+                <div class="pe-machine-filter-grid">
+                    <a class="pe-machine-filter-card" href="/machine.html?confidence=VERY_HIGH">
+                        <em>01</em>
+                        <span>Very High Confidence</span>
+                        <strong>Top-rated model selections with the highest certainty bands.</strong>
+                    </a>
+                    <a class="pe-machine-filter-card" href="/machine.html?boolean=EDGE">
+                        <em>02</em>
+                        <span>Positive Odds Edge</span>
+                        <strong>Picks where model probability beats bookmaker implied odds.</strong>
+                    </a>
+                    <a class="pe-machine-filter-card" href="/machine.html?min=75">
+                        <em>03</em>
+                        <span>75%+ Probability</span>
+                        <strong>High-probability selections across all markets and leagues.</strong>
+                    </a>
+                    <a class="pe-machine-filter-card" href="/machine.html?boolean=LOW_RISK">
+                        <em>04</em>
+                        <span>Low Risk Picks</span>
+                        <strong>Conservative selections with at least 70% win probability.</strong>
+                    </a>
+                </div>
+                <div class="pe-machine-filter-sections">
+                    <div class="pe-machine-filter-group">
+                        <span>Market focus</span>
+                        <div class="pe-filter-chip-list">
+                            <a href="/machine.html?market=HOME_WIN">Home Win</a>
+                            <a href="/machine.html?market=AWAY_WIN">Away Win</a>
+                            <a href="/machine.html?market=OVER_2_5_GOALS">Over 2.5</a>
+                            <a href="/machine.html?market=UNDER_3_5_GOALS">Under 3.5</a>
+                            <a href="/machine.html?market=BTTS_YES">BTTS Yes</a>
+                            <a href="/machine.html?market=BTTS_NO">BTTS No</a>
+                        </div>
+                    </div>
+                    <div class="pe-machine-filter-group">
+                        <span>Probability bands</span>
+                        <div class="pe-filter-chip-list">
+                            <a href="/machine.html?min=60">60%+</a>
+                            <a href="/machine.html?min=70">70%+</a>
+                            <a href="/machine.html?min=75">75%+</a>
+                            <a href="/machine.html?min=80">80%+</a>
+                            <a href="/machine.html?min=60&max=75">60-75%</a>
+                        </div>
+                    </div>
+                    <div class="pe-machine-filter-group">
+                        <span>Odds and value</span>
+                        <div class="pe-filter-chip-list">
+                            <a href="/machine.html?boolean=ODDS">Odds available</a>
+                            <a href="/machine.html?boolean=EDGE">Positive edge</a>
+                            <a href="/machine.html?boolean=EDGE&min=70">Edge + 70%</a>
+                            <a href="/machine.html?boolean=ODDS&confidence=VERY_HIGH">Odds + very high</a>
+                        </div>
+                    </div>
+                    <div class="pe-machine-filter-group">
+                        <span>Confidence</span>
+                        <div class="pe-filter-chip-list">
+                            <a href="/machine.html?boolean=HIGH_CONF">High or very high</a>
+                            <a href="/machine.html?confidence=HIGH">High</a>
+                            <a href="/machine.html?confidence=VERY_HIGH">Very high</a>
+                            <a href="/machine.html?boolean=LOW_RISK">Low risk</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pe-machine-filter-footer">
+                    <div>
+                        <span>Need a custom view?</span>
+                        <strong>Open Machine to combine league, market, team search, probability range, confidence, odds, and edge filters.</strong>
+                    </div>
+                    <a class="pe-btn secondary compact" href="/machine.html">Full Filter Workspace</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="pe-card pe-home-side-panel">
+            <div class="pe-section-header">
+                <div>
+                    <h2>Matches to Watch</h2>
+                    <p>Live and scheduled fixtures with prediction and match-stat shortcuts.</p>
+                </div>
+                <a class="pe-btn secondary compact" href="/fixtures.html">Fixtures</a>
+            </div>
+            <div class="pe-grid-2" id="fixturePreviewList"></div>
+        </div>
+    </section>
+
+    <section class="pe-card pe-home-tools">
+        <div class="pe-section-header">
+            <div>
+                <h2>Explore PitchEdge</h2>
+                <p>Use the product from fixture discovery to value review and model performance.</p>
+            </div>
+        </div>
+        <div class="pe-home-tool-grid">
+            <a class="pe-home-tool-card" href="/fixtures.html">
+                <span>Fixtures</span>
+                <strong>Browse matches, scores, prediction status, and match stats.</strong>
+            </a>
+            <a class="pe-home-tool-card" href="/predictions.html">
+                <span>Prediction Builder</span>
+                <strong>Choose leagues, markets, filters, and strategy for a new run.</strong>
+            </a>
+            <a class="pe-home-tool-card" href="/machine.html">
+                <span>PitchEdge Machine</span>
+                <strong>Filter stored predictions by probability, confidence, odds, and edge.</strong>
+            </a>
+            <a class="pe-home-tool-card" href="/value-picks.html">
+                <span>Value Picks</span>
+                <strong>Find picks where model probability beats implied probability.</strong>
+            </a>
+            <a class="pe-home-tool-card" href="/model-performance.html">
+                <span>Model Performance</span>
+                <strong>Check settled results, confidence bands, and calibration status.</strong>
+            </a>
+            <a class="pe-home-tool-card" href="/leagues.html">
+                <span>Leagues</span>
+                <strong>Review competition coverage, seasons, match counts, and readiness.</strong>
+            </a>
+        </div>
+    </section>
+
+    <section class="pe-card">
+        <div class="pe-section-header">
+            <div>
+                <h2>Recent Activity</h2>
+                <p>Open previous prediction runs without regenerating them.</p>
+            </div>
+            <a class="pe-btn secondary compact" href="/history.html">View History</a>
+        </div>
+        <div class="pe-run-list" id="recentRunsList"></div>
+    </section>
+
+    <section class="pe-card pe-how-it-works" id="howItWorks">
+        <div class="pe-section-header">
+            <div>
+                <h2>How PitchEdge Works</h2>
+                <p>PitchEdge helps users review football fixtures using model probabilities, market data, recent form, and match statistics. Each pick is supported by evidence so users can understand why it qualified.</p>
+            </div>
+        </div>
+        <div class="pe-how-grid">
+            <div class="pe-how-card">
+                <h3>Predictions</h3>
+                <p>Predictions are generated from local football data. The model compares teams, form, fixtures, and market conditions. Probabilities are shown for markets like 1X2, over/under, BTTS, cards, corners, and other available markets. Predictions are probabilities, not guarantees.</p>
+            </div>
+            <div class="pe-how-card">
+                <h3>Match Center</h3>
+                <p>Match Center shows supporting evidence. Users can review last matches, team form, ranking, H2H, trends, and pre-match stats. This helps users understand the context behind each pick.</p>
+            </div>
+            <div class="pe-how-card">
+                <h3>Value Picks</h3>
+                <p>Value means model probability is higher than bookmaker implied probability. Value Picks highlight selections where the model sees stronger probability than the market price suggests. Show odds, implied probability, model probability, and edge when available.</p>
+            </div>
+            <div class="pe-how-card">
+                <h3>Model Performance</h3>
+                <p>Settled predictions can be reviewed. Users can check confidence bands, accuracy, and calibration. This helps users understand where the model performs better or worse.</p>
+            </div>
+        </div>
+        <div class="pe-how-note">
+            <strong>Responsible Analysis Note:</strong>
+            <span>PitchEdge is an analysis tool. Predictions are probabilities, not certainties. Use the data as supporting information, not as a guarantee.</span>
+        </div>
+    </section>
+</main>
+
+<footer class="pe-home-footer">
+    <div class="pe-footer-content">
+        <div class="pe-footer-brand">
+            <div class="pe-logo-copy">
+                <strong>PitchEdge</strong>
+                <span>Football predictions with evidence, probability, and market edge.</span>
+            </div>
+            <p class="pe-footer-desc">PitchEdge is an analysis tool. Predictions are probabilities, not certainties. Use the data as supporting information, not as a guarantee.</p>
+        </div>
+        <div class="pe-footer-links">
+            <div class="pe-footer-col">
+                <h4>Product</h4>
+                <a href="/fixtures.html">Fixtures</a>
+                <a href="/predictions.html">Predictions</a>
+                <a href="/value-picks.html">Value Picks</a>
+                <a href="/fixtures.html">Match Center</a>
+            </div>
+            <div class="pe-footer-col">
+                <h4>Analysis</h4>
+                <a href="/machine.html">PitchEdge Machine</a>
+                <a href="/model-performance.html">Stats</a>
+                <a href="/leagues.html">Leagues</a>
+                <a href="/history.html">History</a>
+            </div>
+            <div class="pe-footer-col">
+                <h4>Information</h4>
+                <a href="#howItWorks">How PitchEdge Works</a>
+                <a href="/model-performance.html">Model Performance</a>
+                <a href="#howItWorks">Responsible Use</a>
+            </div>
+        </div>
+    </div>
+    <div class="pe-footer-bottom">
+        <span>&copy; 2026 PitchEdge. All rights reserved. Professional football analysis and prediction platform.</span>
+    </div>
+</footer>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script src="/dashboard.js"></script>
+</body>
+</html>

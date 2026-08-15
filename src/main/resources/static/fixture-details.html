@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Match Center - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="stylesheet" href="/predictions.css">
+    <link rel="stylesheet" href="/fixture-details.css">
+</head>
+<body>
+
+
+<main class="fixture-details-main">
+    <div id="loadingState" class="empty-state">
+        <div class="pe-section-stack">
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+        </div>
+    </div>
+    <div id="errorState" class="empty-state hidden">
+        <p>Failed to load fixture details.</p>
+    </div>
+
+    <div id="contentState" class="hidden">
+        <!-- Fixture Hero -->
+        <section class="glass-panel fixture-hero">
+            <div class="fixture-header">
+                <div class="team home-team">
+                    <span id="homeTeamMark"></span>
+                    <h2 id="homeTeamName">--</h2>
+                </div>
+                <div class="vs-badge" id="vsBadge">VS</div>
+                <div class="team away-team">
+                    <span id="awayTeamMark"></span>
+                    <h2 id="awayTeamName">--</h2>
+                </div>
+            </div>
+            <div class="fixture-meta">
+                <span id="competitionName" class="badge">--</span>
+                <span id="matchStatusBadge" class="badge badge-neutral" style="display:none;"></span>
+                <span id="kickoffTime" class="meta-item">--</span>
+                <span id="venueName" class="meta-item">--</span>
+            </div>
+            
+            <div class="prediction-summary-box">
+                <div class="stat-box">
+                    <span class="label">Recommended Pick</span>
+                    <strong id="recommendedPick" class="brand-text">--</strong>
+                </div>
+                <div class="stat-box">
+                    <span class="label">Analysis Confidence</span>
+                    <strong id="overallConfidence">--</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Switcher -->
+        <div class="tabs-header glass-panel" style="display: flex; gap: 12px; padding: 12px 24px; margin-top: 24px; border-radius: 16px;">
+            <button type="button" class="tab-btn active" id="tabPredictionsBtn" style="flex: 1; padding: 12px; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; border: none; background: var(--brand); color: #fff; transition: all 0.2s ease;">Prediction & Market Probabilities</button>
+            <button type="button" class="tab-btn secondary" id="tabStatsBtn" style="flex: 1; padding: 12px; font-weight: 600; font-size: 16px; border-radius: 12px; cursor: pointer; border: 1px solid var(--line); background: var(--panel); color: var(--text); transition: all 0.2s ease;">Match Stats & Supporting Evidence</button>
+        </div>
+
+        <!-- Tab 1: Predictions & Market Probabilities -->
+        <div id="tabContentPredictions" style="margin-top: 24px;">
+            <!-- Filters Section -->
+            <section class="glass-panel filters-section">
+                <div class="filters-top">
+                    <input type="text" id="marketSearch" class="search-input" placeholder="Search markets...">
+                    <div class="filter-controls">
+                        <select id="categoryFilter" class="filter-select">
+                            <option value="ALL">All Categories</option>
+                        </select>
+                        <select id="sortFilter" class="filter-select">
+                            <option value="PROBABILITY_DESC">Highest Probability</option>
+                            <option value="CATEGORY">Category</option>
+                            <option value="EDGE_DESC">Highest Edge</option>
+                            <option value="CONFIDENCE_DESC">Confidence</option>
+                        </select>
+                        <label class="toggle-label">
+                            <input type="checkbox" id="qualifiedOnlyToggle">
+                            <span>Qualified Only</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Markets Layout -->
+            <section class="markets-layout">
+                <div id="availableMarketsContainer" class="markets-grid">
+                    <!-- Market cards injected here -->
+                </div>
+            </section>
+
+            <!-- Unavailable Markets (Collapsed) -->
+            <details class="glass-panel unavailable-markets hidden" id="unavailableSection" style="margin-top: 24px; padding: 16px 24px; border-radius: 16px;">
+                <summary style="cursor: pointer; font-weight: 600; font-size: 16px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+                    <span>Unavailable Markets (Calculations not possible)</span>
+                    <span id="unavailableCountBadge" class="badge">0</span>
+                </summary>
+                <div class="unavailable-grid" id="unavailableMarketsList" style="margin-top: 16px;">
+                    <!-- Unavailable market items injected here -->
+                </div>
+            </details>
+        </div>
+
+        <!-- Tab 2: Supporting Stats & Evidence -->
+        <div id="tabContentStats" class="hidden" style="margin-top: 24px;">
+            <section class="supporting-stats-section glass-panel" id="supportingStatsSection">
+                <div id="matchStatsRoot" class="match-stats-root"></div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<script src="/fixture-details.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Results - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="stylesheet" href="/prediction-results.css">
+</head>
+<body>
+<div class="ambient-bg"></div>
+
+<header class="app-header glass-panel">
+    <div class="brand">
+        <div class="logo-icon">PE</div>
+        <h1>PitchEdge <span class="badge accent">Analytics</span></h1>
+    </div>
+    <nav class="main-nav">
+        <a href="/predictions.html" class="nav-link" id="backToBuilderNavBtn">← Back to Prediction Builder</a>
+    </nav>
+</header>
+
+<main class="app-main">
+    <div id="loadingState" class="empty-state glass-panel">
+        <div class="spinner"></div>
+        <div class="pe-section-stack" style="margin-top:16px">
+            <div class="pe-skeleton"></div>
+            <div class="pe-skeleton"></div>
+        </div>
+    </div>
+
+    <div id="errorState" class="empty-state glass-panel hidden">
+        <h3 id="errorTitle">Prediction run not found</h3>
+        <p id="errorMessage">No prediction run selected or the saved reference is invalid.</p>
+        <a href="/predictions.html" class="button primary" style="margin-top: 16px; display: inline-block;">Return to Prediction Builder</a>
+    </div>
+
+    <div id="contentState" class="hidden">
+        <!-- Top Summary Header -->
+        <section class="glass-panel summary-header">
+            <div class="summary-top">
+                <div>
+                    <span class="eyebrow">Prediction Slate</span>
+                    <h2 id="runTitle">Generated Predictions</h2>
+                    <div class="run-meta" id="runMeta">Saved run: --</div>
+                </div>
+                <div class="summary-actions">
+                    <button type="button" id="exportExcelBtn" class="secondary">Download Excel</button>
+                    <a href="/predictions.html" class="button primary">Back to Builder</a>
+                </div>
+            </div>
+
+            <!-- Summary Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Date Range</span>
+                    <span class="stat-value" id="statDateRange">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Leagues Included</span>
+                    <span class="stat-value" id="statLeaguesCount">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Fixtures Predicted</span>
+                    <span class="stat-value" id="statFixturesCount">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Recommended Picks</span>
+                    <span class="stat-value" id="statPicksCount">--</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Warnings Banner -->
+        <details id="warningsSection" class="warnings-banner glass-panel hidden">
+            <summary class="warnings-summary">
+        <span class="warning-icon">!</span>
+                <span id="warningsTitle">Important Notices</span>
+            </summary>
+            <ul id="warningsList" class="warnings-list"></ul>
+        </details>
+
+        <!-- Filter Controls -->
+        <section class="glass-panel filter-bar" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="filter-inputs">
+                <input type="text" id="searchFilter" placeholder="Search team or fixture..." class="search-input">
+                <select id="leagueFilter" class="filter-select">
+                    <option value="">All Leagues</option>
+                </select>
+                <select id="marketFilter" class="filter-select">
+                    <option value="">All Markets</option>
+                </select>
+                <select id="sortFilter" class="filter-select">
+                    <option value="time">Kickoff Time</option>
+                    <option value="prob_desc">Probability (High to Low)</option>
+                    <option value="edge_desc">Edge (High to Low)</option>
+                </select>
+                <select id="h2hFilter" class="filter-select">
+                    <option value="">Any H2H Status</option>
+                    <option value="has_h2h">Has H2H</option>
+                </select>
+                <select id="seasonFilter" class="filter-select">
+                    <option value="">Any Season Status</option>
+                    <option value="full_season">Full Season Only</option>
+                </select>
+            </div>
+            <div id="marketChipsContainer" class="market-chips" style="display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px;">
+                <button type="button" class="chip-btn active" data-market="" style="border-radius: 20px; padding: 6px 16px; font-weight: 600; font-size: 13px; background: var(--brand); color: #fff; border: none; cursor: pointer; white-space: nowrap;">All Markets</button>
+                <button type="button" class="chip-btn" data-market="MATCH_WINNER" style="border-radius: 20px; padding: 6px 16px; font-weight: 600; font-size: 13px; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; white-space: nowrap;">1X2 Match Winner</button>
+                <button type="button" class="chip-btn" data-market="OVER_UNDER" style="border-radius: 20px; padding: 6px 16px; font-weight: 600; font-size: 13px; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; white-space: nowrap;">Over / Under</button>
+                <button type="button" class="chip-btn" data-market="BOTH_TEAMS_TO_SCORE" style="border-radius: 20px; padding: 6px 16px; font-weight: 600; font-size: 13px; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; white-space: nowrap;">BTTS</button>
+                <button type="button" class="chip-btn" data-market="CORNERS" style="border-radius: 20px; padding: 6px 16px; font-weight: 600; font-size: 13px; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; white-space: nowrap;">Corners</button>
+                <button type="button" class="chip-btn" data-market="CARDS" style="border-radius: 20px; padding: 6px 16px; font-weight: 600; font-size: 13px; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; white-space: nowrap;">Cards</button>
+                <button type="button" class="chip-btn" data-market="CORRECT_SCORE" style="border-radius: 20px; padding: 6px 16px; font-weight: 600; font-size: 13px; background: var(--panel); color: var(--text); border: 1px solid var(--line); cursor: pointer; white-space: nowrap;">Correct Score</button>
+            </div>
+        </section>
+
+        <!-- Prediction Cards Grid -->
+        <section id="predictionCardsGrid" class="prediction-cards-grid">
+            <!-- Cards injected by JS -->
+        </section>
+
+        <div id="noMatchesState" class="empty-state glass-panel hidden">
+            <h3>No predictions match your filter</h3>
+            <p>Try adjusting your search or dropdown filters.</p>
+        </div>
+    </div>
+</main>
+
+<script src="/prediction-results.js"></script>
+</body>
+</html>

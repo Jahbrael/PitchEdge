@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Value Picks - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<main class="pe-main">
+    <section class="pe-card elevated">
+        <div class="pe-section-header">
+            <div>
+                <h2>Value Picks</h2>
+                <p>Value = model probability is higher than bookmaker implied probability.</p>
+            </div>
+        </div>
+        <div class="pe-filter-bar">
+            <input type="date" id="fromDate">
+            <input type="date" id="toDate">
+            <input type="search" id="searchInput" placeholder="Search team or fixture">
+            <select id="leagueFilter"><option value="">All leagues</option></select>
+            <select id="marketFilter"><option value="">All markets</option></select>
+            <select id="sortFilter">
+                <option value="edge">Sort by edge</option>
+                <option value="probability">Sort by probability</option>
+                <option value="time">Sort by kickoff time</option>
+            </select>
+        </div>
+        <div id="valueSummary" class="pe-metric-grid" style="margin-top:16px"></div>
+    </section>
+
+    <section class="pe-value-layout">
+        <div class="pe-card">
+            <div class="pe-section-header">
+                <div>
+                    <h2>Qualified Value Picks</h2>
+                    <p>Only selections with odds and positive model edge appear here.</p>
+                </div>
+                <span class="pe-badge" id="valueCount">0 picks</span>
+            </div>
+            <div id="valuePicksList" class="pe-page-grid"></div>
+        </div>
+        <aside class="pe-card pe-sticky-panel">
+            <div class="pe-section-header">
+                <div>
+                    <h2>Slip Builder</h2>
+                    <p>Analysis only. This does not place bets.</p>
+                </div>
+                <button type="button" class="pe-btn secondary compact" id="clearSlipBtn">Clear</button>
+            </div>
+            <div id="slipSummary" class="pe-page-grid"></div>
+            <div class="pe-card" style="margin:14px 0;color:var(--text-muted)">
+                Accumulator probability assumes independent selections and may overstate real-world chance when picks are correlated.
+            </div>
+            <div id="slipList" class="pe-page-grid"></div>
+        </aside>
+    </section>
+</main>
+<script src="/value-picks.js"></script>
+</body>
+</html>

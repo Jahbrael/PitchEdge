@@ -1,0 +1,18 @@
+package com.betai.domain.market;
+
+public enum MarketType {
+    MATCH_RESULT,
+    DOUBLE_CHANCE,
+    DRAW_NO_BET,
+    TOTAL_GOALS,
+    TEAM_TOTAL_GOALS,
+    BOTH_TEAMS_TO_SCORE,
+    TEAM_TO_SCORE_FIRST,
+    CLEAN_SHEET,
+    GOAL_PERIOD,
+    TEAM_TO_WIN_PERIOD,
+    TOTAL_CORNERS,
+    TEAM_CORNERS,
+    TOTAL_YELLOW_CARDS,
+    RED_CARD
+}

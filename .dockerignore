@@ -1,0 +1,16 @@
+.git
+.idea
+target
+*.iml
+*.log
+.DS_Store
+node_modules
+tmp
+.env.*
+!.env.example
+config/application.yml
+cookies.txt
+.agents
+.codex
+.gemini
+.junie

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PitchEdge Machine - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<main class="pe-main">
+    <section class="pe-card elevated">
+        <div class="pe-section-header">
+            <div>
+                <h2>PitchEdge Machine</h2>
+                <p>Filter stored predictions by probability, confidence, odds coverage, value edge, league, market, and kickoff window.</p>
+            </div>
+        </div>
+        <div class="pe-filter-bar">
+            <input type="date" id="fromDate">
+            <input type="date" id="toDate">
+            <input type="search" id="searchInput" placeholder="Search fixture or team">
+            <select id="leagueFilter"><option value="">All leagues</option></select>
+            <select id="marketFilter"><option value="">All markets</option></select>
+            <select id="confidenceFilter">
+                <option value="">Any confidence</option>
+                <option value="VERY_HIGH">Very high</option>
+                <option value="HIGH">High</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LOW">Low</option>
+            </select>
+            <input type="number" id="minProbability" min="0" max="100" placeholder="Min probability %">
+            <input type="number" id="maxProbability" min="0" max="100" placeholder="Max probability %">
+            <select id="booleanFilter">
+                <option value="">All predictions</option>
+                <option value="ODDS">Odds available only</option>
+                <option value="EDGE">Positive edge only</option>
+                <option value="HIGH_CONF">High confidence only</option>
+                <option value="LOW_RISK">Low risk</option>
+            </select>
+        </div>
+    </section>
+    <section class="pe-card">
+        <div class="pe-section-header">
+            <div>
+                <h2>Machine Results</h2>
+                <p>Every result comes from stored prediction runs and can be opened for match evidence.</p>
+            </div>
+            <span class="pe-badge" id="resultCount">0 results</span>
+        </div>
+        <div id="machineResults" class="pe-grid-3"></div>
+    </section>
+</main>
+<script src="/machine.js"></script>
+</body>
+</html>

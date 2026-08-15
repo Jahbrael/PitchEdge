@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prediction History - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<main class="pe-main">
+    <section class="pe-card elevated">
+        <div class="pe-section-header">
+            <div>
+                <h2>Prediction History</h2>
+                <p>Open previous prediction runs without regenerating them.</p>
+            </div>
+            <a class="pe-btn" href="/predictions.html">New Prediction Run</a>
+        </div>
+    </section>
+
+    <section class="pe-grid-2">
+        <div class="pe-card">
+            <div class="pe-section-header">
+                <div>
+                    <h2>Recent Runs</h2>
+                    <p>Reopen generated prediction runs by saved reference.</p>
+                </div>
+            </div>
+            <div id="runHistoryList" class="pe-page-grid">
+                <div class="pe-skeleton"></div>
+                <div class="pe-skeleton"></div>
+            </div>
+        </div>
+
+        <div class="pe-card">
+            <div class="pe-section-header">
+                <div>
+                    <h2>Saved Batches</h2>
+                    <p>Authenticated user history, when signed in.</p>
+                </div>
+            </div>
+            <div id="savedBatchList" class="pe-page-grid">
+                <div class="pe-skeleton"></div>
+            </div>
+        </div>
+    </section>
+</main>
+<script src="/history.js"></script>
+</body>
+</html>

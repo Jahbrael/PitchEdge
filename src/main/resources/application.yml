@@ -1,0 +1,144 @@
+spring:
+  application:
+    name: bet-ai
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  datasource:
+    url: ${BETAI_DB_URL:jdbc:postgresql://localhost:5432/bet_ai}
+    username: ${BETAI_DB_USERNAME:bet_ai}
+    password: ${BETAI_DB_PASSWORD:bet_ai}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      pool-name: BetAiHikariPool
+      maximum-pool-size: ${BETAI_DB_POOL_MAX:10}
+      minimum-idle: ${BETAI_DB_POOL_MIN_IDLE:2}
+      connection-timeout: ${BETAI_DB_CONNECTION_TIMEOUT_MS:30000}
+      idle-timeout: ${BETAI_DB_IDLE_TIMEOUT_MS:600000}
+      max-lifetime: ${BETAI_DB_MAX_LIFETIME_MS:1800000}
+      validation-timeout: ${BETAI_DB_VALIDATION_TIMEOUT_MS:5000}
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          time_zone: UTC
+        default_batch_fetch_size: 50
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: ${PORT:8080}
+  max-http-request-header-size: ${BETAI_MAX_HEADER_SIZE:16KB}
+  servlet:
+    context-path: ${BETAI_CONTEXT_PATH:}
+  error:
+    include-stacktrace: never
+    include-binding-errors: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    com.betai: ${BETAI_LOG_LEVEL:INFO}
+    org.hibernate.SQL: ${BETAI_SQL_LOG_LEVEL:WARN}
+
+bet-ai:
+  prediction:
+    default-model-version: ${BETAI_MODEL_VERSION:phase27-dixon-coles-v2}
+    max-batches: ${BETAI_MAX_BATCHES:100}
+    max-selections-per-batch: ${BETAI_MAX_SELECTIONS_PER_BATCH:500}
+    max-date-range-days: ${BETAI_MAX_DATE_RANGE_DAYS:14}
+    form-match-statuses: ${BETAI_FORM_MATCH_STATUSES:SCHEDULED,FINISHED}
+    default-season-count: ${BETAI_DEFAULT_SEASON_COUNT:3}
+    maximum-season-count: ${BETAI_MAXIMUM_SEASON_COUNT:10}
+    insufficient-season-policy: ${BETAI_INSUFFICIENT_SEASON_POLICY:USE_MAX_AVAILABLE}
+    minimum-completed-matches-per-usable-season: ${BETAI_MINIMUM_COMPLETED_MATCHES_PER_USABLE_SEASON:10}
+  scraping:
+    max-payload-bytes: ${BETAI_MAX_SCRAPE_PAYLOAD_BYTES:5242880}
+    robots-timeout-ms: ${BETAI_ROBOTS_TIMEOUT_MS:5000}
+  odds:
+    provider: ${BETAI_ODDS_PROVIDER:sharpapi}
+    sharpapi:
+      enabled: ${BETAI_SHARPAPI_ENABLED:true}
+      api-key: ${BETAI_SHARPAPI_KEY:}
+      base-url: ${BETAI_SHARPAPI_BASE_URL:https://api.sharpapi.io/api/v1}
+  sources:
+    api-football:
+      enabled: ${BETAI_API_FOOTBALL_ENABLED:true}
+      api-key: ${BETAI_API_FOOTBALL_KEY:}
+      base-url: ${BETAI_API_FOOTBALL_BASE_URL:https://v3.football.api-sports.io}
+      timezone: ${BETAI_API_FOOTBALL_TIMEZONE:UTC}
+  integrations:
+    thesportsdb:
+      enabled: ${BETAI_THESPORTSDB_ENABLED:true}
+      base-url: ${BETAI_THESPORTSDB_BASE_URL:https://www.thesportsdb.com/api/v2/json}
+      api-key: ${BETAI_THESPORTSDB_API_KEY:${THESPORTSDB_API_KEY:}}
+      requests-per-minute: ${BETAI_THESPORTSDB_REQUESTS_PER_MINUTE:80}
+      connection-timeout: ${BETAI_THESPORTSDB_CONNECTION_TIMEOUT:10s}
+      read-timeout: ${BETAI_THESPORTSDB_READ_TIMEOUT:30s}
+      live-scores-enabled: ${BETAI_THESPORTSDB_LIVE_SCORES_ENABLED:true}
+      live-stats-enabled: ${BETAI_THESPORTSDB_LIVE_STATS_ENABLED:true}
+      live-scores-refresh-fixed-delay-ms: ${BETAI_THESPORTSDB_LIVE_SCORES_REFRESH_FIXED_DELAY_MS:180000}
+      live-scores-refresh-initial-delay-ms: ${BETAI_THESPORTSDB_LIVE_SCORES_INITIAL_DELAY_MS:60000}
+      coverage:
+        full-threshold: ${BETAI_THESPORTSDB_COVERAGE_FULL_THRESHOLD:0.80}
+        partial-threshold: ${BETAI_THESPORTSDB_COVERAGE_PARTIAL_THRESHOLD:0.30}
+  security:
+    admin-api-key: ${BETAI_ADMIN_API_KEY:local-dev-admin-key}
+    admin-header-name: ${BETAI_ADMIN_HEADER_NAME:X-BETAI-ADMIN-KEY}
+    cors-allowed-origins: ${BETAI_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173}
+    public-requests-per-minute: ${BETAI_PUBLIC_REQUESTS_PER_MINUTE:60}
+    admin-requests-per-minute: ${BETAI_ADMIN_REQUESTS_PER_MINUTE:120}
+  automation:
+    enabled: ${BETAI_AUTOMATION_ENABLED:true}
+    daily-cron: ${BETAI_AUTOMATION_DAILY_CRON:0 0 4 * * *}
+    zone: ${BETAI_AUTOMATION_ZONE:UTC}
+    prediction-window-days: ${BETAI_AUTOMATION_PREDICTION_WINDOW_DAYS:4}
+    settlement-lookback-days: ${BETAI_AUTOMATION_SETTLEMENT_LOOKBACK_DAYS:3}
+    historical-prediction-lookback-days: ${BETAI_AUTOMATION_HISTORICAL_PREDICTION_LOOKBACK_DAYS:365}
+    backtest-lookback-days: ${BETAI_AUTOMATION_BACKTEST_LOOKBACK_DAYS:365}
+    backtest-minimum-sample-size: ${BETAI_AUTOMATION_BACKTEST_MINIMUM_SAMPLE_SIZE:30}
+    model-quality-minimum-sample-size: ${BETAI_AUTOMATION_MODEL_QUALITY_MINIMUM_SAMPLE_SIZE:30}
+    max-step-attempts: ${BETAI_AUTOMATION_MAX_STEP_ATTEMPTS:3}
+    retry-backoff-ms: ${BETAI_AUTOMATION_RETRY_BACKOFF_MS:1500}
+    step-timeout-ms: ${BETAI_AUTOMATION_STEP_TIMEOUT_MS:7200000}
+    league-codes: ${BETAI_AUTOMATION_LEAGUE_CODES:}
+    prediction-match-statuses: ${BETAI_AUTOMATION_PREDICTION_MATCH_STATUSES:SCHEDULED}
+    run-refresh: ${BETAI_AUTOMATION_RUN_REFRESH:true}
+    run-extraction: ${BETAI_AUTOMATION_RUN_EXTRACTION:true}
+    run-odds-extraction: ${BETAI_AUTOMATION_RUN_ODDS_EXTRACTION:true}
+    run-fixture-discovery: ${BETAI_AUTOMATION_RUN_FIXTURE_DISCOVERY:true}
+    fixture-discovery-auto-register-football-data-sources: ${BETAI_AUTOMATION_FIXTURE_DISCOVERY_AUTO_REGISTER_FOOTBALL_DATA_SOURCES:true}
+    fixture-discovery-generate-pending-slate: ${BETAI_AUTOMATION_FIXTURE_DISCOVERY_GENERATE_PENDING_SLATE:true}
+    fixture-discovery-target-season-label: ${BETAI_AUTOMATION_FIXTURE_DISCOVERY_TARGET_SEASON_LABEL:}
+    run-features: ${BETAI_AUTOMATION_RUN_FEATURES:true}
+    run-historical-predictions: ${BETAI_AUTOMATION_RUN_HISTORICAL_PREDICTIONS:true}
+    run-predictions: ${BETAI_AUTOMATION_RUN_PREDICTIONS:true}
+    run-settlement: ${BETAI_AUTOMATION_RUN_SETTLEMENT:true}
+    run-model-quality: ${BETAI_AUTOMATION_RUN_MODEL_QUALITY:true}
+    run-backtest: ${BETAI_AUTOMATION_RUN_BACKTEST:true}
+    force-refresh: ${BETAI_AUTOMATION_FORCE_REFRESH:false}
+    force-reprocess: ${BETAI_AUTOMATION_FORCE_REPROCESS:false}
+    force-regenerate-features: ${BETAI_AUTOMATION_FORCE_REGENERATE_FEATURES:false}
+    force-regenerate-predictions: ${BETAI_AUTOMATION_FORCE_REGENERATE_PREDICTIONS:false}
+    force-resettle: ${BETAI_AUTOMATION_FORCE_RESETTLE:false}
+    requested-season-count: ${BETAI_AUTOMATION_REQUESTED_SEASON_COUNT:}
+    season-selection-mode: ${BETAI_AUTOMATION_SEASON_SELECTION_MODE:CURRENT_AND_RECENT_COMPLETE}
+    custom-season-ids: ${BETAI_AUTOMATION_CUSTOM_SEASON_IDS:}

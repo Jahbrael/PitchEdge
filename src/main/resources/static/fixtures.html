@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fixtures - PitchEdge</title>
+    <script src="/theme.js"></script>
+    <link rel="stylesheet" href="/theme.css">
+</head>
+<body>
+<main class="pe-main">
+    <section class="pe-card elevated">
+        <div class="pe-section-header">
+            <div>
+                <h2>Fixture Browser</h2>
+                <p>Browse fixtures by date, league, match status, prediction readiness, and odds coverage.</p>
+            </div>
+            <span class="pe-badge good">Live scores auto-update every 3 minutes</span>
+        </div>
+        <div class="pe-filter-bar">
+            <button type="button" class="pe-btn secondary compact" data-day-offset="-1">Yesterday</button>
+            <button type="button" class="pe-btn compact" data-day-offset="0">Today</button>
+            <button type="button" class="pe-btn secondary compact" data-day-offset="1">Tomorrow</button>
+            <input type="date" id="fixtureDate">
+            <input type="search" id="teamSearch" placeholder="Search team">
+            <select id="leagueFilter"><option value="">All leagues</option></select>
+            <select id="statusFilter">
+                <option value="">All fixtures</option>
+                <option value="PRED_READY">Predictions ready</option>
+                <option value="NO_PRED">No prediction yet</option>
+                <option value="ODDS_AVAIL">Odds available</option>
+                <option value="LIVE">Live</option>
+                <option value="FINISHED">Finished</option>
+                <option value="SCHEDULED">Scheduled</option>
+            </select>
+            <select id="groupFilter">
+                <option value="LEAGUE">Group by league</option>
+                <option value="TIME">Group by kickoff time</option>
+                <option value="NONE">No grouping</option>
+            </select>
+        </div>
+        <div class="pe-chip-row" id="fixtureChips">
+            <button type="button" class="pe-chip active" data-market="">All</button>
+            <button type="button" class="pe-chip" data-market="hasPredictions">Prediction ready</button>
+            <button type="button" class="pe-chip" data-market="hasOdds">Odds available</button>
+            <button type="button" class="pe-chip" data-market="live">Live</button>
+        </div>
+        <div class="pe-card" style="margin-top:14px">
+            <span class="pe-badge accent" id="scoreRefreshSummary">Live score sync checks today’s fixtures every 3 minutes.</span>
+        </div>
+    </section>
+
+    <section id="fixtureList" class="pe-page-grid">
+        <div class="pe-skeleton"></div>
+        <div class="pe-skeleton"></div>
+        <div class="pe-skeleton"></div>
+    </section>
+</main>
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+<script src="/fixtures.js"></script>
+</body>
+</html>
